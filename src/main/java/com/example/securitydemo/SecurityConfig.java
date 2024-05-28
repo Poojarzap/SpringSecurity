@@ -1,5 +1,6 @@
 package com.example.securitydemo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,16 +15,22 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity //for GreetingsController PreAuthorize() to work
 public class SecurityConfig {
-    @Bean
 
-    //Code taken from SpringBootWebSecurityConfiguration.class
+    @Autowired
+    DataSource dataSource;
+    @Bean
+    //Code taken from SpringBootWebSecurityConfiguration.class (Press Shift-twice)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> {
             ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)
@@ -53,6 +60,12 @@ public class SecurityConfig {
                 .password("{noop}adminPass")
                 .roles("ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user1,admin);  //Create user in in-memory
+
+        // Replace in-memory user management with JDBC user management
+        JdbcUserDetailsManager userDetailsManager =new JdbcUserDetailsManager(dataSource);
+        userDetailsManager.createUser(user1);
+        userDetailsManager.createUser(admin);
+        return userDetailsManager;
+        //return new InMemoryUserDetailsManager(user1,admin);  //Create user in in-memory
     }
 }
