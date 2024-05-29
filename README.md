@@ -8,8 +8,8 @@ Spring Security (YOUTUBE : https://www.youtube.com/watch?v=GH7L4D8Q_ak&t=6997s)<
 ->Tables are created by taking content from github springsecurity, USER.ddl file
 ->Encoding password using BCryptPasswordEncoder() of type "PasswordEncoder"<br/>
 ->Jwt(JSON web tokens)
-1) JwtUtils class = methods for generating, parsing and validating JWTs.<br/> Include generating a token from username, validating JWT and extracting username from token. <br/>
+1) JwtUtils class(helper class) = methods for generating, parsing and validating JWTs.<br/> Include generating a token from username, validating JWT and extracting username from token. <br/>
 2) AuthTokenFilter class = Filters incoming requests to check for a valid JWT in the header, setting authentication context if the token is valid.
 3) AuthEntryPointJwt = custom handling for unauthorized requests.
-4) SecurityConfig class = sets up the security filter chain, permitting or denying access based on paths and roles. Also configures session management to stateless, which is crucial for JWT usage.
+4) SecurityConfig class = sets up the security filter chain, permitting or denying access based on paths and roles. Also configures session management to stateless, which is crucial for JWT usage.<br/>
 -> Copy the dependencies for JWT from JWT github->(installation->maven)
